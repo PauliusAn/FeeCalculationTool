@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using Models;
 
 namespace Persistence.FileSystem
@@ -15,11 +18,17 @@ namespace Persistence.FileSystem
 
         public Transaction GetNextTransaction()
         {
-            var fileLine = _transactionFileReader.ReadNextLine().Trim();
+            var transactionString = GetTransactionLine();
 
-            var transactionInfo = fileLine.Split(' ');
+            if (transactionString == null)
+            {
+                return null;
+            }
 
-            if (transactionInfo.Length != 3)
+            var lineParts = transactionString.Split(' ');
+            var transactionInfo = lineParts.Where(x => x != string.Empty).ToList();
+
+            if (transactionInfo.Count != 3)
             {
                 throw new InvalidDataException("Transaction in transactions file was in invalid format");
             }
@@ -45,6 +54,18 @@ namespace Persistence.FileSystem
             var day = short.Parse(dateParts[2]);
 
             return new DateTime(year, month, day);
+        }
+
+        private string GetTransactionLine()
+        {
+            var fileLine = _transactionFileReader.ReadNextLine();
+
+            while (fileLine == string.Empty)
+            {
+                fileLine = _transactionFileReader.ReadNextLine();
+            }
+
+            return fileLine;
         }
     }
 }
