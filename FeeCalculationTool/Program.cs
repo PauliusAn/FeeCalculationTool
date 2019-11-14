@@ -1,12 +1,9 @@
-﻿using System;
-
-namespace FeeCalculationTool
+﻿namespace FeeCalculationTool
 {
     class Program
     {
         static void Main(string[] args)
         {
-
         }
     }
 }

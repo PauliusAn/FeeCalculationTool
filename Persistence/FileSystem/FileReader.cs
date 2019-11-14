@@ -2,10 +2,12 @@
 
 namespace Persistence.FileSystem
 {
-    public class FileRepository
+    public class FileReader : IFileReader
     {
-        private const string FilePath = "transactions.txt";
+        private const string FilePath = "../../../../transactions.txt";
         private StreamReader _fileStreamReader;
+
+        // Todo: Validate the read line to be sure it's a valid transaction format
 
         public string ReadNextLine()
         {
