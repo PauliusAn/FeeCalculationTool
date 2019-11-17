@@ -56,17 +56,5 @@ namespace Persistence.TransactionRepository
 
             return new DateTime(year, month, day);
         }
-
-        private string GetTransactionLine()
-        {
-            var fileLine = _transactionFileReader.ReadNextLine();
-
-            while (fileLine == string.Empty)
-            {
-                fileLine = _transactionFileReader.ReadNextLine();
-            }
-
-            return fileLine;
-        }
     }
 }
