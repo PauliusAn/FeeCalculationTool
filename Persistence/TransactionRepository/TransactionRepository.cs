@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography.X509Certificates;
-using Models;
+using Models.Models;
+using Persistence.FileSystem;
 
-namespace Persistence.FileSystem
+namespace Persistence.TransactionRepository
 {
     public class TransactionRepository : ITransactionRepository
     {
@@ -18,7 +17,14 @@ namespace Persistence.FileSystem
 
         public Transaction GetNextTransaction()
         {
-            var transactionString = GetTransactionLine();
+            var transactionString = _transactionFileReader.ReadNextLine();
+
+            // To keep output formatted as input, every empty line in source file is represented by
+            // Transaction object with merchantName as empty string and transferAmount as 0
+            if (transactionString == "")
+            {
+                return new Transaction(DateTime.Now, string.Empty, 0);
+            }
 
             if (transactionString == null)
             {
@@ -33,12 +39,7 @@ namespace Persistence.FileSystem
                 throw new InvalidDataException("Transaction in transactions file was in invalid format");
             }
 
-            return new Transaction()
-            {
-                Date = ParseDate(transactionInfo[0]),
-                Name = transactionInfo[1],
-                TransferAmount = decimal.Parse(transactionInfo[2])
-            };
+            return new Transaction(ParseDate(transactionInfo[0]), transactionInfo[1], decimal.Parse(transactionInfo[2]));
         }
 
         private static DateTime ParseDate(string dateString)

@@ -1,18 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using Models;
+using System.Linq;
+using Domain.Service.FeeCalculationStrategies;
+using Domain.Service.Models;
+using Models.Models;
 
 namespace Domain.Service
 {
-    public static class FeeCalculator
+    public class FeeCalculator
     {
-        private const double BasicFee = 0.01;
+        public HashSet<Merchant> RegisteredMerchants { get; }
+        private readonly decimal _fixedMonthlyFee = 29;
 
-        public static decimal CalculateFee(Transaction transaction)
+        public FeeCalculator()
         {
-            return transaction.TransferAmount * Convert.ToDecimal(BasicFee);
+            RegisteredMerchants = new HashSet<Merchant>();
+        }
+
+        public decimal CalculateFee(Transaction transaction)
+        {
+            if (RegisteredMerchants.All(x => x.Name != transaction.MerchantName))
+            {
+                RegisteredMerchants.Add(new Merchant(new BasicFeeCalculation(), transaction.MerchantName));
+            }
+
+            decimal totalFee = 0;
+            var merchant = RegisteredMerchants.FirstOrDefault(x => x.Name == transaction.MerchantName);
+
+            if (!merchant.HasMadePayment(transaction.Date))
+            {
+                totalFee += _fixedMonthlyFee;
+                merchant.AddPaymentDate(transaction.Date);
+            }
+
+            totalFee += merchant.FeeCalculationStrategy.CalculateFee(transaction.TransferAmount);
+
+            return totalFee;
         }
     }
 }

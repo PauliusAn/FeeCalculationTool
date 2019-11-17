@@ -1,6 +1,6 @@
-﻿using Models;
+﻿using Models.Models;
 
-namespace Persistence.FileSystem
+namespace Persistence.TransactionRepository
 {
     public interface ITransactionRepository
     {
