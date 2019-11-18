@@ -1,4 +1,4 @@
-﻿using Models.Models;
+﻿using Persistence.Read_Models;
 
 namespace Persistence.TransactionRepository
 {

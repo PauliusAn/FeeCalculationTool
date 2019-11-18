@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Domain.Service.FeeCalculationStrategies;
 
 namespace Domain.Service.Models
@@ -9,7 +7,7 @@ namespace Domain.Service.Models
     {
         public string Name { get; }
 
-        public HashSet<DateTime> MonthsWithPaymentsMade { get; }
+        public DateTime LastDateMonthlyFeeWasPaid { get; set; }
 
         public FeeCalculationStrategy FeeCalculationStrategy { get; }
 
@@ -17,17 +15,16 @@ namespace Domain.Service.Models
         {
             FeeCalculationStrategy = feeCalculationStrategy;
             Name = name;
-            MonthsWithPaymentsMade = new HashSet<DateTime>();
         }
 
-        public void AddPaymentDate(DateTime date)
+        public bool IsMonthlyFeePaid(DateTime date)
         {
-            MonthsWithPaymentsMade.Add(new DateTime(date.Year, date.Month, 1));
-        }
+            if (LastDateMonthlyFeeWasPaid == DateTime.MinValue)
+                return false;
+            date = date.AddDays(-date.Day);
+            var paidMonth = LastDateMonthlyFeeWasPaid.AddDays(-LastDateMonthlyFeeWasPaid.Day);
 
-        public bool HasMadePayment(DateTime date)
-        {
-            return MonthsWithPaymentsMade.Contains(new DateTime(date.Year, date.Month, 1));
+            return date <= paidMonth;
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Models.Models;
 using Persistence.FileSystem;
+using Persistence.Read_Models;
 
 namespace Persistence.TransactionRepository
 {
@@ -55,18 +55,6 @@ namespace Persistence.TransactionRepository
             var day = short.Parse(dateParts[2]);
 
             return new DateTime(year, month, day);
-        }
-
-        private string GetTransactionLine()
-        {
-            var fileLine = _transactionFileReader.ReadNextLine();
-
-            while (fileLine == string.Empty)
-            {
-                fileLine = _transactionFileReader.ReadNextLine();
-            }
-
-            return fileLine;
         }
     }
 }

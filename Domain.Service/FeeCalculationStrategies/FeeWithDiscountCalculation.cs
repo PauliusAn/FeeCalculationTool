@@ -1,4 +1,6 @@
-﻿namespace Domain.Service.FeeCalculationStrategies
+﻿using System;
+
+namespace Domain.Service.FeeCalculationStrategies
 {
     public class FeeWithDiscountCalculation : FeeCalculationStrategy
     {
@@ -6,6 +8,10 @@
 
         public FeeWithDiscountCalculation(decimal feeDiscount)
         {
+            if (feeDiscount > 1 || feeDiscount < 0)
+            {
+                throw new ArgumentException("Fee discount value must be between 0 and 1!");
+            }
             FeeDiscount = feeDiscount;
         }
 
