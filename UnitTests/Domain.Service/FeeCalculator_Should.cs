@@ -2,7 +2,7 @@
 using Domain.Service;
 using Domain.Service.FeeCalculationStrategies;
 using Domain.Service.Models;
-using Models.Models;
+using Persistence.Read_Models;
 using Xunit;
 
 namespace UnitTests.Domain.Service

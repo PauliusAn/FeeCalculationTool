@@ -2,7 +2,7 @@
 using System.Linq;
 using Domain.Service.FeeCalculationStrategies;
 using Domain.Service.Models;
-using Models.Models;
+using Persistence.Read_Models;
 
 namespace Domain.Service
 {

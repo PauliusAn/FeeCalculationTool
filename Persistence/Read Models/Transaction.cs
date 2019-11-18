@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Models.Models
+namespace Persistence.Read_Models
 {
     public class Transaction
     {
@@ -34,11 +34,6 @@ namespace Models.Models
             Date = date;
             MerchantName = merchantName;
             TransferAmount = transferAmount;
-        }
-
-        public Transaction(DateTime date, string merchantName, decimal transferAmount, decimal fee) : this(date, merchantName, transferAmount)
-        {
-            Fee = fee;
         }
 
         public override string ToString()

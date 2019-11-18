@@ -1,8 +1,8 @@
 ﻿using System;
 using Domain.Service.FeeCalculationStrategies;
 using Domain.Service.Models;
-using Models.Models;
 using Persistence.FileSystem;
+using Persistence.Read_Models;
 using Persistence.TransactionRepository;
 
 namespace Domain.Service
