@@ -14,7 +14,8 @@ namespace Domain.Service
             EnsureFileExistence();
 
             var transactionRepository = new TransactionRepository(new FileReader("../../../../transactions.txt"));
-            var feeCalculator = GetFeeCalculatorWithRegisteredMerchants();
+            var feeCalculator = new FeeCalculator();
+            RegisterMerchants(feeCalculator);
             CalculateAllFees(transactionRepository, feeCalculator);
         }
 
@@ -34,12 +35,10 @@ namespace Domain.Service
             }
         }
 
-        private static FeeCalculator GetFeeCalculatorWithRegisteredMerchants()
+        private static void RegisterMerchants(FeeCalculator feeCalculator)
         {
-            var feeCalculator = new FeeCalculator();
             feeCalculator.RegisteredMerchants.Add(new Merchant(new FeeWithDiscountCalculation(0.1m), "TELIA"));
             feeCalculator.RegisteredMerchants.Add(new Merchant(new FeeWithDiscountCalculation(0.2m), "CIRCLE_K"));
-            return feeCalculator;
         }
 
         private static void EnsureFileExistence()

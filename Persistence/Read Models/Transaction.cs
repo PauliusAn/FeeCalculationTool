@@ -38,7 +38,7 @@ namespace Persistence.Read_Models
 
         public override string ToString()
         {
-            return $"{Date.ToShortDateString()} {MerchantName} {Fee:0.00}";
+            return $"{Date.ToShortDateString()} {MerchantName,-10} {Fee:0.00}";
         }
     }
 }
