@@ -31,10 +31,10 @@ namespace UnitTests.Domain.Service.FeeCalculationStrategies
         public void ThrowException_WhenInvalidFeeDiscountIsGiven(decimal discount)
         {
             // Arrange
-            Action a = () => new FeeWithDiscountCalculation(discount);
+            Action setInvalidDiscount = () => new FeeWithDiscountCalculation(discount);
 
             // Act & Assert
-            a.Should().Throw<ArgumentException>();
+            setInvalidDiscount.Should().Throw<ArgumentException>();
         }
     }
 }
