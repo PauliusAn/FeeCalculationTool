@@ -26,10 +26,10 @@ namespace Domain.Service
             decimal totalFee = 0;
             var merchant = RegisteredMerchants.FirstOrDefault(x => x.Name == transaction.MerchantName);
 
-            if (!merchant.HasMadePayment(transaction.Date))
+            if (!merchant.IsMonthlyFeePaid(transaction.Date))
             {
                 totalFee += _fixedMonthlyFee;
-                merchant.AddPaymentDate(transaction.Date);
+                merchant.LastDateMonthlyFeeWasPaid = transaction.Date;
             }
 
             totalFee += merchant.FeeCalculationStrategy.CalculateFee(transaction.TransferAmount);

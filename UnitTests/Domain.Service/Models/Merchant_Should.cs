@@ -12,16 +12,16 @@ namespace UnitTests.Domain.Service.Models
         [InlineData(2020, 11, 10)]
         [InlineData(2015, 1, 17)]
         [InlineData(2045, 12, 10)]
-        public void ReturnTrue_WhenDateIsAlreadyInCollection(int year, int month, int day)
+        public void ReturnTrue_WhenMonthlyFeeWasPaidInSameMonth(int year, int month, int day)
         {
             // Arrange
             var sut = new Merchant(null, "");
             var date = new DateTime(year, month, day);
 
-            sut.AddPaymentDate(date);
+            sut.LastDateMonthlyFeeWasPaid = date;
 
             // Act
-            var result = sut.HasMadePayment(date);
+            var result = sut.IsMonthlyFeePaid(date);
 
             // Assert
             Assert.True(result);
@@ -39,7 +39,7 @@ namespace UnitTests.Domain.Service.Models
             var date = new DateTime(year, month, day);
 
             // Act
-            var result = sut.HasMadePayment(date);
+            var result = sut.IsMonthlyFeePaid(date);
 
             // Assert
             Assert.False(result);

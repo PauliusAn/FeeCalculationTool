@@ -16,7 +16,7 @@ namespace UnitTests.Domain.Service
         {
             // Arrange
             var sut = new FeeCalculator();
-            var testTransaction = new Transaction(DateTime.Now, "unknownMerchant", 100);
+            var testTransaction = new Transaction(new DateTime(2019, 10, 10), "unknownMerchant", 100);
             var expected = 1 + _fixedMonthlyFee;
 
             // Act
@@ -33,11 +33,11 @@ namespace UnitTests.Domain.Service
             var sut = new FeeCalculator();
 
             var testMerchant = new Merchant(new BasicFeeCalculation(), "knownMerchant");
-            testMerchant.AddPaymentDate(DateTime.Now);
+            testMerchant.LastDateMonthlyFeeWasPaid = new DateTime(2019, 10, 10);
 
             sut.RegisteredMerchants.Add(testMerchant);
 
-            var testTransaction = new Transaction(DateTime.Now, "knownMerchant", 100);
+            var testTransaction = new Transaction(new DateTime(2019, 10, 10), "knownMerchant", 100);
 
             // Act
             var result = sut.CalculateFee(testTransaction);
@@ -55,7 +55,7 @@ namespace UnitTests.Domain.Service
             var testMerchant = new Merchant(new FeeWithDiscountCalculation(0.2m), "knownMerchant");
             sut.RegisteredMerchants.Add(testMerchant);
 
-            var testTransaction = new Transaction(DateTime.Now, "knownMerchant", 100);
+            var testTransaction = new Transaction(new DateTime(2019, 10, 10), "knownMerchant", 100);
             var expected = _fixedMonthlyFee + 0.8m;
 
             // Act
@@ -72,11 +72,11 @@ namespace UnitTests.Domain.Service
             var sut = new FeeCalculator();
 
             var testMerchant = new Merchant(new FeeWithDiscountCalculation(0.2m), "knownMerchant");
-            testMerchant.AddPaymentDate(DateTime.Now);
+            testMerchant.LastDateMonthlyFeeWasPaid = new DateTime(2019, 10, 10);
 
             sut.RegisteredMerchants.Add(testMerchant);
 
-            var testTransaction = new Transaction(DateTime.Now, "knownMerchant", 100);
+            var testTransaction = new Transaction(new DateTime(2019, 10, 10), "knownMerchant", 100);
 
             // Act
             var result = sut.CalculateFee(testTransaction);

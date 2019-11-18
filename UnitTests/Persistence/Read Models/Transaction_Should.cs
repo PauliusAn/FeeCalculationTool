@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using FluentAssertions;
 using Persistence.Read_Models;
 using Xunit;
@@ -16,7 +14,7 @@ namespace UnitTests.Persistence.Read_Models
         public void ThrowException_WhenTryingToSetNegativeFee(decimal fee)
         {
             // Arrange
-            var sut = new Transaction(DateTime.Now, "testMerchant", 100);
+            var sut = new Transaction(new DateTime(2019, 10, 10), "testMerchant", 100);
             Action setInvalidFee = () => sut.Fee = fee;
 
             // Act & Assert
