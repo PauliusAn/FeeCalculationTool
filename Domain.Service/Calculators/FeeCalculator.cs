@@ -1,6 +1,6 @@
 ﻿using Persistence.Read_Models;
 
-namespace Domain.Service.Models.FeeCalculator
+namespace Domain.Service.Calculators
 {
     public class FeeCalculator : BaseCalculator
     {
@@ -9,6 +9,11 @@ namespace Domain.Service.Models.FeeCalculator
         public override decimal CalculateFee(Transaction transaction)
         {
             return transaction.TransferAmount * _feeRate;
+        }
+
+        public decimal GetFeeRate()
+        {
+            return _feeRate;
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Domain.Service.Models.FeeCalculator;
-using Domain.Service.Models.FeeCalculator.Decorators;
+using Domain.Service.Calculators.Decorators;
+using Domain.Service.Models;
 using Persistence.Read_Models;
 
-namespace Domain.Service.Models
+namespace Domain.Service.Calculators
 {
-    public class Accountant : BaseCalculator
+    public class Accountant
     {
         public HashSet<BaseCalculator> RegisteredCalculators { get; }
 
@@ -15,11 +15,11 @@ namespace Domain.Service.Models
             RegisteredCalculators = new HashSet<BaseCalculator>();
         }
 
-        public override decimal CalculateFee(Transaction transaction)
+        public decimal CalculateFee(Transaction transaction)
         {
             if (RegisteredCalculators.All(x => x.Merchant.Name != transaction.MerchantName))
             {
-                RegisteredCalculators.Add(new MonthlyFeeCalculator(new FeeCalculator.FeeCalculator())
+                RegisteredCalculators.Add(new MonthlyFeeCalculator(new FeeCalculator())
                 {
                     Merchant = new Merchant(transaction.MerchantName)
                 });

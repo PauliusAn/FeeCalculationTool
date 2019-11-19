@@ -1,6 +1,6 @@
 ﻿using Persistence.Read_Models;
 
-namespace Domain.Service.Models.FeeCalculator.Decorators
+namespace Domain.Service.Calculators.Decorators
 {
     public class CalculatorDecorator : BaseCalculator
     {

@@ -1,6 +1,7 @@
 ﻿using System;
+using Domain.Service.Calculators;
+using Domain.Service.Calculators.Decorators;
 using Domain.Service.Models;
-using Domain.Service.Models.FeeCalculator.Decorators;
 using Persistence.FileSystem;
 using Persistence.Read_Models;
 using Persistence.TransactionRepository;
@@ -41,12 +42,12 @@ namespace Domain.Service
         private static void RegisterMerchants(Accountant accountant)
         {
             accountant.RegisteredCalculators.Add(
-                new MonthlyFeeCalculator(new FeeDiscountCalculator(new Models.FeeCalculator.FeeCalculator(), 0.1m))
+                new MonthlyFeeCalculator(new FeeDiscountCalculator(new FeeCalculator(), 0.1m))
                 {
                     Merchant = new Merchant("TELIA")
                 });
             accountant.RegisteredCalculators.Add(
-                new MonthlyFeeCalculator(new FeeDiscountCalculator(new Models.FeeCalculator.FeeCalculator(), 0.2m))
+                new MonthlyFeeCalculator(new FeeDiscountCalculator(new FeeCalculator(), 0.2m))
                 {
                     Merchant = new Merchant("CIRCLE_K")
                 });
