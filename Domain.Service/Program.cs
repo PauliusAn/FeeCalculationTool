@@ -1,6 +1,6 @@
 ﻿using System;
-using Domain.Service.FeeCalculationStrategies;
 using Domain.Service.Models;
+using Domain.Service.Models.FeeCalculator.Decorators;
 using Persistence.FileSystem;
 using Persistence.Read_Models;
 using Persistence.TransactionRepository;
@@ -9,17 +9,20 @@ namespace Domain.Service
 {
     class Program
     {
+        private const string TransactionsFilePath = "../../../../transactions.txt";
+
         static void Main()
         {
             EnsureFileExistence();
 
-            var transactionRepository = new TransactionRepository(new FileReader("../../../../transactions.txt"));
-            var feeCalculator = new FeeCalculator();
-            RegisterMerchants(feeCalculator);
-            CalculateAllFees(transactionRepository, feeCalculator);
+            var transactionRepository = new TransactionRepository(new FileReader(TransactionsFilePath));
+            var feeAccountant = new Accountant();
+
+            RegisterMerchants(feeAccountant);
+            CalculateAllFees(transactionRepository, feeAccountant);
         }
 
-        private static void CalculateAllFees(TransactionRepository transactionRepository, FeeCalculator feeCalculator)
+        private static void CalculateAllFees(TransactionRepository transactionRepository, Accountant feeAccountant)
         {
             Transaction currentTransaction;
             while ((currentTransaction = transactionRepository.GetNextTransaction()) != null)
@@ -30,15 +33,23 @@ namespace Domain.Service
                     continue;
                 }
 
-                currentTransaction.Fee = feeCalculator.CalculateFee(currentTransaction);
+                currentTransaction.Fee = feeAccountant.CalculateFee(currentTransaction);
                 Console.WriteLine(currentTransaction);
             }
         }
 
-        private static void RegisterMerchants(FeeCalculator feeCalculator)
+        private static void RegisterMerchants(Accountant accountant)
         {
-            feeCalculator.RegisteredMerchants.Add(new Merchant(new FeeWithDiscountCalculation(0.1m), "TELIA"));
-            feeCalculator.RegisteredMerchants.Add(new Merchant(new FeeWithDiscountCalculation(0.2m), "CIRCLE_K"));
+            accountant.RegisteredCalculators.Add(
+                new MonthlyFeeCalculator(new FeeDiscountCalculator(new Models.FeeCalculator.FeeCalculator(), 0.1m))
+                {
+                    Merchant = new Merchant("TELIA")
+                });
+            accountant.RegisteredCalculators.Add(
+                new MonthlyFeeCalculator(new FeeDiscountCalculator(new Models.FeeCalculator.FeeCalculator(), 0.2m))
+                {
+                    Merchant = new Merchant("CIRCLE_K")
+                });
         }
 
         private static void EnsureFileExistence()
