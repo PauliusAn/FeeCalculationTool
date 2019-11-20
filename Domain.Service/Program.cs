@@ -3,7 +3,6 @@ using Domain.Service.Calculators;
 using Domain.Service.Calculators.Decorators;
 using Domain.Service.Models;
 using Persistence.FileSystem;
-using Persistence.Read_Models;
 using Persistence.TransactionRepository;
 
 namespace Domain.Service
@@ -20,24 +19,14 @@ namespace Domain.Service
             var feeAccountant = new Accountant();
 
             RegisterMerchants(feeAccountant);
-            CalculateAllFees(transactionRepository, feeAccountant);
-        }
 
-        private static void CalculateAllFees(TransactionRepository transactionRepository, Accountant feeAccountant)
-        {
-            Transaction currentTransaction;
-            while ((currentTransaction = transactionRepository.GetNextTransaction()) != null)
+            foreach (var transaction in feeAccountant.CalculateAllFees(transactionRepository))
             {
-                if (currentTransaction.MerchantName == string.Empty && currentTransaction.TransferAmount == 0)
-                {
-                    Console.WriteLine();
-                    continue;
-                }
-
-                currentTransaction.Fee = feeAccountant.CalculateFee(currentTransaction);
-                Console.WriteLine(currentTransaction);
+                Console.WriteLine(transaction);
             }
         }
+
+        
 
         private static void RegisterMerchants(Accountant accountant)
         {
@@ -57,7 +46,7 @@ namespace Domain.Service
         {
             var fileCreator = new FileCreator();
 
-            fileCreator.CreateFileIfNotExists("../../../../transactions.txt");
+            fileCreator.CreateFileIfNotExists(TransactionsFilePath);
         }
     }
 }
